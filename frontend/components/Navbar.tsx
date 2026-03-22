@@ -38,7 +38,7 @@ export default function Navbar() {
       <nav className="wrap h-16 flex items-center justify-between">
 
         <a href="#" className="font-bold text-white flex-shrink-0"
-          style={{ fontFamily:"'Inter',sans-serif", fontSize:"1.1rem", letterSpacing:"-0.01em" }}>
+          style={{ fontFamily:"'Inter',sans-serif", fontSize:"1.3rem", letterSpacing:"-0.01em" }}>
           {brandText}
           {brandSym && (
             <span style={{ background:"linear-gradient(135deg,var(--accent),var(--accent2))", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent" }}>
