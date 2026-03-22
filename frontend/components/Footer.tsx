@@ -39,7 +39,7 @@ export default function Footer() {
         </div>
 
         <p className="mono text-xs" style={{ color:"var(--text3)" }}>
-          © {new Date().getFullYear()} · Next.js + FastAPI
+          © {new Date().getFullYear()} · Created by Saqib Ahmad Siddiqui
         </p>
       </div>
     </footer>
