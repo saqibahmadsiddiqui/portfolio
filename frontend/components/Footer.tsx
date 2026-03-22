@@ -4,7 +4,7 @@ import { useProfile } from "./Providers";
 
 export default function Footer() {
   const profile = useProfile();
-  const links = (profile.links || {}) as { linkedin?:string; github?:string; twitter?:string; website?:string };
+  const links = profile.links;
 
   const socials = [
     { href:links.linkedin,                        icon:<Linkedin size={14}/>, label:"LinkedIn" },

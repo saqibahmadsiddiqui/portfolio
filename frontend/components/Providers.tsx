@@ -2,13 +2,52 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { fetchProfile, fetchTheme } from "../lib/api";
 
-const DEFAULT_PROFILE = {
-  name: "Saqib Ahmad Siddiqui",
-  tagline: "AI & Software Engineer",
-  bio: "Results-driven and adaptable Software Engineer with a solid foundation in programming, database systems, and analytical problem-solving. Aspiring to specialize in Artificial Intelligence and Data Science.",
+export interface ProfileLinks {
+  github:   string;
+  linkedin: string;
+  twitter:  string;
+  website:  string;
+}
+
+export interface StatItem {
+  v: string;
+  l: string;
+  s: string;
+}
+
+export interface Profile {
+  name:              string;
+  tagline:           string;
+  bio:               string;
+  location:          string;
+  email:             string;
+  phone:             string;
+  links:             ProfileLinks;
+  animation_tokens:  string[];
+  navbar_brand:      string;
+  page_title:        string;
+  open_to_work:      boolean;
+  open_to_work_text: string;
+  stats:             StatItem[];
+}
+
+export interface Theme {
+  accent:   string;
+  accent2:  string;
+  accent3:  string;
+  bg:       string;
+  bg2:      string;
+  surface:  string;
+  surface2: string;
+}
+
+const DEFAULT_PROFILE: Profile = {
+  name:     "Saqib Ahmad Siddiqui",
+  tagline:  "AI & Software Engineer",
+  bio:      "Results-driven and adaptable Software Engineer with a solid foundation in programming, database systems, and analytical problem-solving. Aspiring to specialize in Artificial Intelligence and Data Science.",
   location: "Multan, Pakistan",
-  email: "saqibahmad2004@gmail.com",
-  phone: "+923107274227",
+  email:    "saqibahmad2004@gmail.com",
+  phone:    "+923107274227",
   links: {
     github:   "https://github.com/saqibahmadsiddiqui",
     linkedin: "https://linkedin.com/in/saqib-ahmad-siddiqui",
@@ -21,9 +60,9 @@ const DEFAULT_PROFILE = {
     "accuracy_score()","Oracle APEX","df.describe()","Docker",
     "n_estimators=100","ChromaDB","TypeScript","Next.js",
   ],
-  navbar_brand: "Saqib//;",
-  page_title: "Saqib Ahmad Siddiqui | AI & Software Engineer",
-  open_to_work: true,
+  navbar_brand:      "Saqib//;",
+  page_title:        "Saqib Ahmad Siddiqui | AI & Software Engineer",
+  open_to_work:      true,
   open_to_work_text: "Available for full-time, internships, and freelance in AI & software.",
   stats: [
     { v:"3.9",   l:"CGPA",       s:"out of 4.0"          },
@@ -33,7 +72,7 @@ const DEFAULT_PROFILE = {
   ],
 };
 
-const DEFAULT_THEME = {
+const DEFAULT_THEME: Theme = {
   accent:   "#3b82f6",
   accent2:  "#06b6d4",
   accent3:  "#6366f1",
@@ -42,9 +81,6 @@ const DEFAULT_THEME = {
   surface:  "#0c1424",
   surface2: "#111e33",
 };
-
-type Profile = typeof DEFAULT_PROFILE;
-type Theme   = typeof DEFAULT_THEME;
 
 const ProfileCtx = createContext<Profile>(DEFAULT_PROFILE);
 const ThemeCtx   = createContext<Theme>(DEFAULT_THEME);
@@ -75,12 +111,12 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       fetchTheme().catch(() => null),
     ]).then(([p, t]) => {
       if (p?.name) {
-        setProfile(p);
+        setProfile(p as Profile);
         if (p.page_title) document.title = p.page_title;
       }
       if (t?.accent) {
-        setTheme(t);
-        applyTheme(t);
+        setTheme(t as Theme);
+        applyTheme(t as Theme);
       }
       setReady(true);
     });
