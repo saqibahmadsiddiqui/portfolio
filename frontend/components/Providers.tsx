@@ -25,6 +25,7 @@ export interface Profile {
   links:             ProfileLinks;
   animation_tokens:  string[];
   navbar_brand:      string;
+  resume_url:        string;
   page_title:        string;
   open_to_work:      boolean;
   open_to_work_text: string;
@@ -61,6 +62,7 @@ const DEFAULT_PROFILE: Profile = {
     "n_estimators=100","ChromaDB","TypeScript","Next.js",
   ],
   navbar_brand:      "Saqib//;",
+  resume_url:        "/resume.pdf",
   page_title:        "Saqib Ahmad Siddiqui | AI & Software Engineer",
   open_to_work:      true,
   open_to_work_text: "Available for full-time, internships, and freelance in AI & software.",
