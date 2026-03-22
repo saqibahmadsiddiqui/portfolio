@@ -82,7 +82,7 @@ export default function Hero() {
     fromRight:i%2===1, delay:(i*1.3)%9, dur:11+(i%5), colorIdx:i,
   }));
 
-  const links = profile.links || {};
+  const links = (profile.links || {}) as { linkedin?:string; github?:string; twitter?:string; website?:string };
   const accentRgb = hexToRgb(theme.accent);
 
   return (

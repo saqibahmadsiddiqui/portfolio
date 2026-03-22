@@ -4,7 +4,7 @@ import { useProfile } from "./Providers";
 
 export default function Footer() {
   const profile = useProfile();
-  const links   = profile.links || {};
+  const links = (profile.links || {}) as { linkedin?:string; github?:string; twitter?:string; website?:string };
 
   const socials = [
     { href:links.linkedin,                        icon:<Linkedin size={14}/>, label:"LinkedIn" },
@@ -39,7 +39,7 @@ export default function Footer() {
         </div>
 
         <p className="mono text-xs" style={{ color:"var(--text3)" }}>
-          © {new Date().getFullYear()} · Build by Saqib Ahmad Siddiqui
+          © {new Date().getFullYear()} · Next.js + FastAPI
         </p>
       </div>
     </footer>
