@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+backend/venv/
+backend/env/
+backend/.env
+*.egg-info/
+
+# Node
+node_modules/
+.next/
+out/
+frontend/.env.local
+frontend/.env*.local
+
+# OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
+.vercel
