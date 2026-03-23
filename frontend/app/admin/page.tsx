@@ -373,36 +373,31 @@ function ThemePanel({ secret, toast }: { secret:string; toast:(t:Toast)=>void })
 
 // ── Files Panel ───────────────────────────────────────────────────────────────
 function FilesPanel({ secret, toast }: { secret:string; toast:(t:Toast)=>void }) {
-  const [picUploading,  setPicUploading]  = useState(false);
-  const [resUploading,  setResUploading]  = useState(false);
-  const [iconUploading, setIconUploading] = useState(false);
-  const [picPreview,    setPicPreview]    = useState<string|null>(null);
+  const [picUploading, setPicUploading] = useState(false);
+  const [picPreview,   setPicPreview]   = useState<string|null>(null);
 
-  const upload = async (file: File, type: string, setLoading: (v:boolean)=>void) => {
-    setLoading(true);
+  const uploadPicture = async (file: File) => {
+    setPicUploading(true);
     try {
       const fd = new FormData();
       fd.append("file", file);
-      fd.append("type", type);
+      fd.append("type", "picture");
       const r = await fetch("/api/upload", { method:"POST", headers:{"x-admin-secret":secret}, body:fd });
       const d = await r.json();
       if (!r.ok) throw new Error(d.error || "Upload failed");
-      toast({ msg:`${type === "picture" ? "Photo" : type === "resume" ? "Resume" : "Icon"} updated! Refresh to see changes.`, ok:true });
+      toast({ msg:"Photo updated! Refresh to see changes.", ok:true });
     } catch(e:any) { toast({ msg:e.message, ok:false }); }
-    setLoading(false);
+    setPicUploading(false);
   };
 
-  const handleFile = (type: string, setLoading: (v:boolean)=>void, accept: string) => {
+  const handlePicture = () => {
     const input = document.createElement("input");
-    input.type = "file"; input.accept = accept;
+    input.type = "file"; input.accept = "image/jpeg,image/png,image/webp";
     input.onchange = async (e) => {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (!file) return;
-      if (type === "picture") {
-        const url = URL.createObjectURL(file);
-        setPicPreview(url);
-      }
-      await upload(file, type, setLoading);
+      setPicPreview(URL.createObjectURL(file));
+      await uploadPicture(file);
     };
     input.click();
   };
@@ -419,7 +414,7 @@ function FilesPanel({ secret, toast }: { secret:string; toast:(t:Toast)=>void })
               onError={e=>{(e.target as HTMLImageElement).style.display="none";}}/>
           </div>
           <div>
-            <Btn onClick={()=>handleFile("picture",setPicUploading,"image/jpeg,image/png,image/webp")} disabled={picUploading}>
+            <Btn onClick={handlePicture} disabled={picUploading}>
               {picUploading?<><Loader2 size={13} className="animate-spin"/>Uploading…</>:<><span>📷</span>Upload Photo</>}
             </Btn>
             <p className="text-xs mt-2" style={{color:"var(--text3)"}}>Replaces the current photo immediately.</p>
@@ -427,27 +422,19 @@ function FilesPanel({ secret, toast }: { secret:string; toast:(t:Toast)=>void })
         </div>
       </div>
 
-      {/* Resume */}
-      <div className="card p-5">
-        <p className="font-bold text-sm mb-1" style={{color:"var(--text1)",fontFamily:"'Inter',sans-serif"}}>Resume / CV</p>
-        <p className="text-xs mb-4" style={{color:"var(--text3)"}}>Upload your CV as PDF. Saved as <code>resume.pdf</code> — the Download CV button will serve this file.</p>
-        <div className="flex items-center gap-3">
-          <Btn onClick={()=>handleFile("resume",setResUploading,"application/pdf")} disabled={resUploading}>
-            {resUploading?<><Loader2 size={13} className="animate-spin"/>Uploading…</>:<><span>📄</span>Upload Resume PDF</>}
-          </Btn>
-          <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="text-xs" style={{color:"var(--accent)"}}>
-            View current →
-          </a>
+      {/* Resume & Icon — manual */}
+      <div className="card p-5 space-y-4">
+        <p className="font-bold text-sm" style={{color:"var(--text1)",fontFamily:"'Inter',sans-serif"}}>📄 Resume & 🎨 Icon</p>
+        <p className="text-sm leading-relaxed" style={{color:"var(--text2)"}}>
+          To update your resume or browser tab icon, add the files to <code style={{color:"var(--accent)"}}>frontend/public/</code> and push to GitHub — Vercel redeploys automatically in ~1 minute.
+        </p>
+        <div className="space-y-2 text-xs mono" style={{color:"var(--text3)"}}>
+          <p>• Resume → <span style={{color:"var(--accent)"}}>frontend/public/resume.pdf</span></p>
+          <p>• Icon &nbsp; → <span style={{color:"var(--accent)"}}>frontend/public/icon.svg</span></p>
         </div>
-      </div>
-
-      {/* Icon */}
-      <div className="card p-5">
-        <p className="font-bold text-sm mb-1" style={{color:"var(--text1)",fontFamily:"'Inter',sans-serif"}}>Browser Tab Icon</p>
-        <p className="text-xs mb-4" style={{color:"var(--text3)"}}>Upload an SVG icon. Saved as <code>icon.svg</code> — shown in the browser tab next to your name.</p>
-        <Btn onClick={()=>handleFile("icon",setIconUploading,"image/svg+xml")} disabled={iconUploading}>
-          {iconUploading?<><Loader2 size={13} className="animate-spin"/>Uploading…</>:<><span>🎨</span>Upload Icon SVG</>}
-        </Btn>
+        <div className="p-3 rounded-lg text-xs" style={{background:"color-mix(in srgb,var(--accent) 6%,transparent)",border:"1px solid var(--border)",color:"var(--text2)"}}>
+          <strong style={{color:"var(--text1)"}}>Quick steps:</strong> Replace the file locally → <code>git add . && git commit -m "update files" && git push</code>
+        </div>
       </div>
     </div>
   );
