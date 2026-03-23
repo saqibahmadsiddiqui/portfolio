@@ -89,8 +89,6 @@ Visit `/admin` on your deployed site and enter your `ADMIN_SECRET`.
 |                     | Custom hex color pickers for 3 accent colors + backgrounds            |
 |                     | Live preview — changes apply instantly                                |
 | **Files**           | Upload profile photo (600×800px recommended, saved as `Picture.jpeg`) |
-|                     | Upload resume PDF (saved as `resume.pdf`)                             |
-|                     | Upload browser tab icon SVG (saved as `icon.svg`)                     |
 | **Skills**          | Add / Edit / Delete skill groups                                      |
 | **Experience**      | Add / Edit / Delete work history entries                              |
 | **Projects**        | Add / Edit / Delete projects with GitHub/live links                   |
