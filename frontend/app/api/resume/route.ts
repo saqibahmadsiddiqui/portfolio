@@ -1,10 +1,11 @@
 import { readFile } from "fs/promises";
 import { join } from "path";
 
+export const dynamic = "force-dynamic"; // prevent Next.js from caching this route
+
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 export async function GET() {
-  // Try DB first — 5s timeout so it doesn't hang if HuggingFace is sleeping
   try {
     const controller = new AbortController();
     const t = setTimeout(() => controller.abort(), 5000);
@@ -16,20 +17,19 @@ export async function GET() {
         headers: {
           "Content-Type": "application/pdf",
           "Content-Disposition": "inline; filename=resume.pdf",
-          "Cache-Control": "public, max-age=3600",
+          "Cache-Control": "no-store",
         },
       });
     }
   } catch {}
 
-  // Fall back to static file in public/ (readable on Vercel, only writing is restricted)
   try {
     const data = await readFile(join(process.cwd(), "public", "resume.pdf"));
     return new Response(data, {
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": "inline; filename=resume.pdf",
-        "Cache-Control": "public, max-age=300",
+        "Cache-Control": "no-store",
       },
     });
   } catch {}

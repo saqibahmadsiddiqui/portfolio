@@ -1,10 +1,11 @@
 import { readFile } from "fs/promises";
 import { join } from "path";
 
+export const dynamic = "force-dynamic";
+
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 export async function GET() {
-  // Try DB first — 3s timeout (icon needs to load fast)
   try {
     const controller = new AbortController();
     const t = setTimeout(() => controller.abort(), 3000);
@@ -15,19 +16,18 @@ export async function GET() {
       return new Response(data, {
         headers: {
           "Content-Type": "image/svg+xml",
-          "Cache-Control": "public, max-age=3600",
+          "Cache-Control": "no-store",
         },
       });
     }
   } catch {}
 
-  // Fall back to static file in public/
   try {
     const data = await readFile(join(process.cwd(), "public", "icon.svg"));
     return new Response(data, {
       headers: {
         "Content-Type": "image/svg+xml",
-        "Cache-Control": "public, max-age=300",
+        "Cache-Control": "no-store",
       },
     });
   } catch {}
