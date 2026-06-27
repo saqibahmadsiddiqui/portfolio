@@ -4,14 +4,14 @@ import { useProfile } from "./Providers";
 
 export default function Footer() {
   const profile = useProfile();
-  const links = profile.links;
+  const links   = profile.links;
 
   const socials = [
-    { href:links.linkedin,                        icon:<Linkedin size={14}/>, label:"LinkedIn" },
-    { href:links.github,                          icon:<Github size={14}/>,   label:"GitHub"   },
-    { href:links.twitter,                         icon:<Twitter size={14}/>,  label:"Twitter"  },
-    { href:profile.email?`mailto:${profile.email}`:"", icon:<Mail size={14}/>, label:"Email"  },
-    { href:"/resume.pdf",                         icon:<FileText size={14}/>, label:"Resume"   },
+    { href:links.linkedin,                              icon:<Linkedin size={14}/>, label:"LinkedIn" },
+    { href:links.github,                                icon:<Github size={14}/>,   label:"GitHub"   },
+    { href:links.twitter,                               icon:<Twitter size={14}/>,  label:"Twitter"  },
+    { href:profile.email ? `mailto:${profile.email}`:  "", icon:<Mail size={14}/>,  label:"Email"    },
+    { href:"/api/resume",                               icon:<FileText size={14}/>, label:"Resume"   },
   ].filter(s => s.href);
 
   return (
@@ -39,7 +39,7 @@ export default function Footer() {
         </div>
 
         <p className="mono text-xs" style={{ color:"var(--text3)" }}>
-          © {new Date().getFullYear()} · Created by Saqib Ahmad Siddiqui
+          © {new Date().getFullYear()} · Next.js + FastAPI
         </p>
       </div>
     </footer>

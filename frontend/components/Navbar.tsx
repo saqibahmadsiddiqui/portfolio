@@ -31,14 +31,14 @@ export default function Navbar() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
       style={{
-        background:    scrolled ? "color-mix(in srgb, var(--bg) 92%, transparent)" : "transparent",
-        backdropFilter:scrolled ? "blur(20px)" : "none",
-        borderBottom:  scrolled ? "1px solid var(--border)" : "1px solid transparent",
+        background:     scrolled ? "color-mix(in srgb, var(--bg) 92%, transparent)" : "transparent",
+        backdropFilter: scrolled ? "blur(20px)" : "none",
+        borderBottom:   scrolled ? "1px solid var(--border)" : "1px solid transparent",
       }}>
       <nav className="wrap h-16 flex items-center justify-between">
 
         <a href="#" className="font-bold text-white flex-shrink-0"
-          style={{ fontFamily:"'Inter',sans-serif", fontSize:"1.3rem", letterSpacing:"-0.01em" }}>
+          style={{ fontFamily:"'Inter',sans-serif", fontSize:"1.1rem", letterSpacing:"-0.01em" }}>
           {brandText}
           {brandSym && (
             <span style={{ background:"linear-gradient(135deg,var(--accent),var(--accent2))", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent" }}>
@@ -61,7 +61,7 @@ export default function Navbar() {
           ))}
         </ul>
 
-        <a href={profile.resume_url || "/resume.pdf"} target="_blank" rel="noopener noreferrer"
+        <a href="/api/resume" target="_blank" rel="noopener noreferrer"
           className="hidden md:flex items-center gap-1.5 text-sm font-medium flex-shrink-0 px-4 py-2 rounded-lg transition-all"
           style={{ color:"var(--text2)", border:"1px solid var(--border)", background:"color-mix(in srgb,var(--accent) 6%,transparent)", fontFamily:"'DM Sans',sans-serif" }}
           onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.color = "var(--text1)"; el.style.borderColor = "color-mix(in srgb,var(--accent) 40%,transparent)"; }}
@@ -84,7 +84,7 @@ export default function Navbar() {
               {n.label}
             </a>
           ))}
-          <a href={profile.resume_url || "/resume.pdf"} target="_blank" rel="noopener noreferrer"
+          <a href="/api/resume" target="_blank" rel="noopener noreferrer"
             className="mt-4 flex items-center gap-2 text-sm font-medium"
             style={{ color:"var(--accent)", fontFamily:"'DM Sans',sans-serif" }}>
             <FileText size={13} /> Resume

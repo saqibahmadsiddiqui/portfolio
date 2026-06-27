@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     description: "Software Engineer | Python | AI & Data Science",
     type: "website",
   },
-  icons: { icon: "/icon.svg", apple: "/icon.svg" },
+  icons: { icon: "/api/icon", apple: "/api/icon" },
 };
 
 export const viewport = { width: "device-width", initialScale: 1, maximumScale: 1 };

@@ -1,11 +1,12 @@
 """
 Portfolio Backend — FastAPI + NeonDB (PostgreSQL)
 Public : GET  /api/profile, /api/theme, /api/skills,
-              /api/experience, /api/projects, /api/education
+              /api/experience, /api/projects, /api/education,
+              /api/files/{file_id}
 Admin  : POST/PUT/DELETE /api/admin/*  (X-Admin-Secret header)
 Note   : Contact form handled by Next.js API route (Nodemailer + ZeroBounce)
 """
-import os, uuid, json
+import os, uuid, json, base64
 from contextlib import asynccontextmanager
 from typing import Optional
 
@@ -14,6 +15,7 @@ import psycopg2.extras
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Header, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import Response
 from pydantic import BaseModel
 
 load_dotenv()
@@ -65,6 +67,10 @@ def init_db():
                     id TEXT PRIMARY KEY DEFAULT 'main',
                     data JSONB NOT NULL DEFAULT '{}'
                 );
+                CREATE TABLE IF NOT EXISTS files (
+                    id TEXT PRIMARY KEY,
+                    data JSONB NOT NULL DEFAULT '{}'
+                );
             """)
             conn.commit()
             cur.execute("SELECT COUNT(*) as c FROM skills")
@@ -87,10 +93,10 @@ def _seed(cur):
             "website":  "https://saqibahmadsiddiqui.vercel.app",
         },
         "animation_tokens": [
-            "Python", "FastAPI", "import numpy as np", "Scikit-Learn",
-            "model.fit(X,y)", "MLOps", "NeonDB", "Hopsworks",
-            "accuracy_score()", "Oracle APEX", "df.describe()", "Docker",
-            "n_estimators=100", "ChromaDB", "TypeScript", "Next.js",
+            "Python","FastAPI","import numpy as np","Scikit-Learn",
+            "model.fit(X,y)","MLOps","NeonDB","Hopsworks",
+            "accuracy_score()","Oracle APEX","df.describe()","Docker",
+            "n_estimators=100","ChromaDB","TypeScript","Next.js",
         ],
         "navbar_brand": "Saqib//;",
         "page_title": "Saqib Ahmad Siddiqui | AI & Software Engineer",
@@ -186,13 +192,17 @@ class ProfileIn(BaseModel):
     navbar_brand: str = "Portfolio//;"
     page_title: str = ""
     open_to_work: bool = True
-    open_to_work_text: str = "Available for full-time, internships, and freelance in AI & software."
+    open_to_work_text: str = ""
     stats: list[StatItem] = []
 
 class ThemeIn(BaseModel):
     accent: str = "#3b82f6"; accent2: str = "#06b6d4"; accent3: str = "#6366f1"
     bg: str = "#04070f"; bg2: str = "#070d1a"
     surface: str = "#0c1424"; surface2: str = "#111e33"
+
+class FileIn(BaseModel):
+    content_type: str
+    data: str  # base64 encoded
 
 class SkillIn(BaseModel):
     category: str; icon: str = "code"; items: list[str]
@@ -275,9 +285,28 @@ def get_experience():
             "type":r["type"],"points":r["points"]} for r in rows]
     return {"experience":exp,"education":edu.get("education",[]),"certifications":edu.get("certifications",[])}
 
+@app.get("/api/files/{file_id}")
+def get_file(file_id: str):
+    if file_id not in ["resume","icon","picture"]:
+        raise HTTPException(400, "Invalid file type")
+    result = db_get_json("files", file_id)
+    if not result:
+        raise HTTPException(404, "File not found")
+    content = base64.b64decode(result["data"])
+    return Response(content=content, media_type=result["content_type"],
+                    headers={"Cache-Control": "public, max-age=3600"})
+
 # ── Admin: Verify ─────────────────────────────────────────────────────────────
 @app.post("/api/admin/verify", dependencies=[Depends(require_admin)])
 def verify_admin(): return {"status": "ok"}
+
+# ── Admin: Files ──────────────────────────────────────────────────────────────
+@app.put("/api/admin/files/{file_id}", dependencies=[Depends(require_admin)])
+def save_file(file_id: str, data: FileIn):
+    if file_id not in ["resume","icon","picture"]:
+        raise HTTPException(400, "Invalid file type. Use: resume, icon, picture")
+    db_upsert_json("files", {"content_type": data.content_type, "data": data.data}, file_id)
+    return {"status": "ok", "id": file_id}
 
 # ── Admin: Profile ────────────────────────────────────────────────────────────
 @app.put("/api/admin/profile", dependencies=[Depends(require_admin)])

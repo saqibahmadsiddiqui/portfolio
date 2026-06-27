@@ -68,10 +68,10 @@ export default function Hero() {
     };
   };
 
-  const half  = Math.ceil(tokens.length / 2);
-  const leftT = tokens.slice(0, half);
-  const rightT= tokens.slice(half);
-  const toPct = (arr: string[]) => arr.map((_,i) => `${Math.round((i/arr.length)*85+5)}%`);
+  const half   = Math.ceil(tokens.length / 2);
+  const leftT  = tokens.slice(0, half);
+  const rightT = tokens.slice(half);
+  const toPct  = (arr: string[]) => arr.map((_,i) => `${Math.round((i/arr.length)*85+5)}%`);
   const leftPcts  = toPct(leftT);
   const rightPcts = toPct(rightT);
   const hOffL = ["10%","55%","25%","70%","15%","60%","35%","50%"];
@@ -82,7 +82,7 @@ export default function Hero() {
     fromRight:i%2===1, delay:(i*1.3)%9, dur:11+(i%5), colorIdx:i,
   }));
 
-  const links = profile.links;
+  const links     = profile.links;
   const accentRgb = hexToRgb(theme.accent);
 
   return (
@@ -96,7 +96,6 @@ export default function Hero() {
       <div className="absolute -bottom-40 -right-40 w-96 h-96 rounded-full pointer-events-none"
         style={{ background:`radial-gradient(circle,rgba(${hexToRgb(theme.accent3)},0.08),transparent 70%)`, animation:"pulseGlow 5s ease-in-out infinite 2.5s" }}/>
 
-      {/* Spinning ring — desktop only */}
       <svg className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none hidden xl:block"
         width="680" height="680" style={{ opacity:.03, animation:"spinSlow 80s linear infinite" }} aria-hidden>
         <circle cx="340" cy="340" r="310" stroke={theme.accent}  strokeWidth="1"  fill="none" strokeDasharray="8 24"/>
@@ -104,7 +103,7 @@ export default function Hero() {
         <circle cx="340" cy="340" r="130" stroke={theme.accent2} strokeWidth=".4" fill="none" strokeDasharray="3 14"/>
       </svg>
 
-      {/* Desktop xl+: vertical strips left */}
+      {/* Desktop xl+: vertical strips */}
       <div className="hidden xl:block absolute left-0 top-0 bottom-0 pointer-events-none overflow-hidden"
         style={{ width:"calc((100vw - 900px) / 2 + 20px)", zIndex:1 }}>
         {leftT.map((t,i)=>(
@@ -112,8 +111,6 @@ export default function Hero() {
             animation:`floatUpSide ${11+(i%5)}s ease-in-out ${(i*1.4)%9}s infinite` }}>{t}</span>
         ))}
       </div>
-
-      {/* Desktop xl+: vertical strips right */}
       <div className="hidden xl:block absolute right-0 top-0 bottom-0 pointer-events-none overflow-hidden"
         style={{ width:"calc((100vw - 900px) / 2 + 20px)", zIndex:1 }}>
         {rightT.map((t,i)=>(
@@ -138,7 +135,7 @@ export default function Hero() {
       <div className="hero-wrap relative z-10 w-full pt-8 pb-10 md:pt-10 md:pb-12">
         <div style={fi(0)} className="flex flex-col md:flex-row items-center md:items-start gap-7 md:gap-8 lg:gap-12">
 
-          {/* Photo */}
+          {/* Photo — served from DB via /api/picture, falls back to static */}
           <div className="flex-shrink-0">
             <div className="relative">
               <div className="absolute -inset-0.5 rounded-2xl"
@@ -151,7 +148,9 @@ export default function Hero() {
                 borderRadius:"14px", boxShadow:"0 20px 50px rgba(0,0,0,0.55)",
                 transition:"width .3s ease, height .3s ease",
               }}>
-                <img src="/Picture.jpeg" alt={profile.name} className="w-full h-full object-cover object-top"/>
+                <img src="/api/picture" alt={profile.name}
+                  className="w-full h-full object-cover object-top"
+                  onError={e => { (e.target as HTMLImageElement).src = "/Picture.jpeg"; }}/>
               </div>
             </div>
           </div>
@@ -164,15 +163,14 @@ export default function Hero() {
                 {profile.name.includes(" ") ? (
                   <>
                     {profile.name.split(" ").slice(0,-1).join(" ")}<br/>
-                    <span className="grad">
-                      {profile.name.split(" ").slice(-1)[0]}
-                    </span>
+                    <span className="grad">{profile.name.split(" ").slice(-1)[0]}</span>
                   </>
                 ) : (
                   <span className="grad">{profile.name}</span>
                 )}
               </h1>
-              <p className="font-medium mb-3" style={{ color:"var(--text2)", fontSize:"clamp(.85rem,1.6vw,.95rem)", fontFamily:"'DM Sans',sans-serif" }}>
+              <p className="font-medium mb-3"
+                style={{ color:"var(--text2)", fontSize:"clamp(.85rem,1.6vw,.95rem)", fontFamily:"'DM Sans',sans-serif" }}>
                 {profile.tagline}
               </p>
               <p className="leading-relaxed mb-4 mx-auto md:mx-0"
@@ -202,7 +200,7 @@ export default function Hero() {
                   style={{ background:"var(--accent)", boxShadow:`0 0 18px rgba(${accentRgb},0.22)`, fontFamily:"'DM Sans',sans-serif" }}>
                   Get In Touch
                 </a>
-                <a href={profile.resume_url || "/resume.pdf"} target="_blank" rel="noopener noreferrer"
+                <a href="/api/resume" target="_blank" rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all"
                   style={{ color:"var(--text2)", border:"1px solid var(--border)", background:`rgba(${accentRgb},0.05)`, fontFamily:"'DM Sans',sans-serif" }}>
                   <Download size={13}/>Download CV
@@ -211,10 +209,10 @@ export default function Hero() {
 
               <div className="flex justify-center md:justify-start gap-2">
                 {[
-                  { href:links.linkedin,                         icon:<Linkedin size={14}/>, show:!!links.linkedin },
-                  { href:links.github,                           icon:<Github size={14}/>,   show:!!links.github   },
-                  { href:links.twitter,                          icon:<Twitter size={14}/>,  show:!!links.twitter  },
-                  { href:`mailto:${profile.email}`,              icon:<Mail size={14}/>,     show:!!profile.email  },
+                  { href:links.linkedin,                       icon:<Linkedin size={14}/>, show:!!links.linkedin },
+                  { href:links.github,                         icon:<Github size={14}/>,   show:!!links.github   },
+                  { href:links.twitter,                        icon:<Twitter size={14}/>,  show:!!links.twitter  },
+                  { href:`mailto:${profile.email}`,            icon:<Mail size={14}/>,     show:!!profile.email  },
                 ].filter(s=>s.show).map(({ href, icon },i) => (
                   <a key={i} href={href} target="_blank" rel="noopener noreferrer"
                     className="w-8 h-8 rounded-xl flex items-center justify-center transition-all"

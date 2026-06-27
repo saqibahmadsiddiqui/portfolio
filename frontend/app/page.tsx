@@ -24,25 +24,19 @@ const FB_EXP = {
     points:[
       "Developed and integrated reports and forms using Oracle EBS and Oracle APEX.",
       "Learned and wrote SQL queries, including query design and worked with Oracle SQL databases.",
-      "Supported Oracle Forms and Oracle Reports integration and customization to enhance business operations.",
+      "Supported Oracle Forms and Oracle Reports integration and customization.",
       "Learned and worked on Oracle APEX to develop cross-platform websites and applications.",
     ],
   }],
   education: [{ id:"ed1", degree:"BS Computer Science", institution:"NFC Institute of Engineering & Technology", duration:"2022 – 2026", status:"Final Year", gpa:"3.9 / 4.0 (7th Semester)" }],
   certifications: [
     { id:"ce1", title:"Business Communication & AI for Professionals", issuer:"LUMSx" },
-    { id:"ce2", title:"Beginners Meetup — Career Counseling Event",    issuer:"Microsoft Learn Student Ambassador Multan Chapter" },
+    { id:"ce2", title:"Beginners Meetup — Career Counseling Event", issuer:"Microsoft Learn Student Ambassador Multan Chapter" },
   ],
 };
 const FB_PROJECTS = [
-  { id:"pr1", title:"AQI Forecasting System",
-    description:"A data science application that predicts the average AQI of Multan in category 1–5 for the next 3 days. Five models train daily; system auto-selects the best by F1 Score. Built with a full MLOps pipeline using Hopsworks, deployed on Streamlit Cloud.",
-    tags:["Python","Pandas","NumPy","Scikit-Learn","MLOps","Hopsworks","Streamlit","FastAPI"],
-    github:"https://github.com/saqibahmadsiddiqui/aqi-forecasting-system", live:"https://multan-aqi.streamlit.app", featured:true },
-  { id:"pr2", title:"Personal Portfolio Website",
-    description:"A full-stack portfolio built with Next.js 14 and FastAPI with NeonDB. Features smooth animations, dynamic content management via admin dashboard, ZeroBounce email validation, and Nodemailer contact form.",
-    tags:["Next.js","FastAPI","TypeScript","Tailwind CSS","NeonDB","Python","Vercel"],
-    github:"https://github.com/saqibahmadsiddiqui/portfolio-website", live:"https://saqibahmadsiddiqui.vercel.app", featured:true },
+  { id:"pr1", title:"AQI Forecasting System", description:"A data science application that predicts the average AQI of Multan in category 1–5 for the next 3 days. Five models train daily; system auto-selects the best by F1 Score. Built with a full MLOps pipeline using Hopsworks, deployed on Streamlit Cloud.", tags:["Python","Pandas","NumPy","Scikit-Learn","MLOps","Hopsworks","Streamlit","FastAPI"], github:"https://github.com/saqibahmadsiddiqui/aqi-forecasting-system", live:"https://multan-aqi.streamlit.app", featured:true },
+  { id:"pr2", title:"Personal Portfolio Website", description:"A full-stack portfolio built with Next.js 14 and FastAPI with NeonDB. Features smooth animations, dynamic content management via admin dashboard, ZeroBounce email validation, and Nodemailer contact form.", tags:["Next.js","FastAPI","TypeScript","Tailwind CSS","NeonDB","Python","Vercel"], github:"https://github.com/saqibahmadsiddiqui/portfolio-website", live:"https://saqibahmadsiddiqui.vercel.app", featured:true },
 ];
 
 export default function Home() {
@@ -51,9 +45,15 @@ export default function Home() {
   const [projects, setProjects] = useState(FB_PROJECTS);
 
   useEffect(() => {
-    fetchSkills().then(setSkills).catch(()=>{});
-    fetchExperience().then(setExpData).catch(()=>{});
-    fetchProjects().then(setProjects).catch(()=>{});
+    // Reverse all arrays so newest added items appear first
+    fetchSkills().then(d => setSkills([...d].reverse())).catch(()=>{});
+    fetchExperience().then(d => setExpData({
+      ...d,
+      experience:     [...(d.experience     || [])].reverse(),
+      education:      [...(d.education      || [])].reverse(),
+      certifications: [...(d.certifications || [])].reverse(),
+    })).catch(()=>{});
+    fetchProjects().then(d => setProjects([...d].reverse())).catch(()=>{});
   }, []);
 
   return (

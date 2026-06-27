@@ -17,7 +17,6 @@ type Toast = { msg: string; ok: boolean };
 type Tab   = "profile"|"theme"|"files"|"skills"|"experience"|"projects"|"education";
 const inputCls = "input text-sm w-full";
 
-// ── Shared Button ─────────────────────────────────────────────────────────────
 function Btn({ onClick, children, color="blue", disabled=false, small=false }: any) {
   const m: any = {
     blue:  { bg:"color-mix(in srgb,var(--accent) 10%,transparent)",  border:"color-mix(in srgb,var(--accent) 30%,transparent)",  text:"var(--accent)"  },
@@ -74,8 +73,8 @@ function Login({ onLogin }: { onLogin:(s:string)=>void }) {
 
 // ── Profile Panel ─────────────────────────────────────────────────────────────
 function ProfilePanel({ secret, toast }: { secret:string; toast:(t:Toast)=>void }) {
-  const [loading, setLoading] = useState(true);
-  const [saving,  setSaving]  = useState(false);
+  const [loading,  setLoading]  = useState(true);
+  const [saving,   setSaving]   = useState(false);
   const [name,     setName]     = useState("");
   const [tagline,  setTagline]  = useState("");
   const [bio,      setBio]      = useState("");
@@ -101,7 +100,7 @@ function ProfilePanel({ secret, toast }: { secret:string; toast:(t:Toast)=>void 
       if (d.name) {
         setName(d.name||""); setTagline(d.tagline||""); setBio(d.bio||"");
         setLocation(d.location||""); setEmail(d.email||""); setPhone(d.phone||"");
-setNavBrand(d.navbar_brand||"Portfolio//;");
+        setNavBrand(d.navbar_brand||"Portfolio//;");
         const l = d.links||{};
         setGithub(l.github||""); setLinkedin(l.linkedin||"");
         setTwitter(l.twitter||""); setWebsite(l.website||"");
@@ -151,9 +150,8 @@ setNavBrand(d.navbar_brand||"Portfolio//;");
         </div>
         <div className="grid sm:grid-cols-2 gap-3">
           <div><label className="label block mb-1.5">Phone</label><input className={inputCls} value={phone} onChange={e=>setPhone(e.target.value)} placeholder="+1 234 567 8900"/></div>
-  
+          <div><label className="label block mb-1.5">Navbar Brand (e.g. John//;)</label><input className={inputCls} value={navBrand} onChange={e=>setNavBrand(e.target.value)} placeholder="Portfolio//;"/></div>
         </div>
-        <div><label className="label block mb-1.5">Navbar Brand (e.g. John//;)</label><input className={inputCls} value={navBrand} onChange={e=>setNavBrand(e.target.value)} placeholder="Portfolio//;"/></div>
       </div>
 
       <div className="card p-5 space-y-4">
@@ -169,24 +167,12 @@ setNavBrand(d.navbar_brand||"Portfolio//;");
       </div>
 
       <div className="card p-5 space-y-3">
-        <p className="font-bold text-sm" style={{ color:"var(--text1)", fontFamily:"'Inter',sans-serif" }}>
-          ✦ Animation Tokens
-        </p>
-        <p className="text-xs" style={{ color:"var(--text3)" }}>Comma-separated skills/code snippets floating in the hero background</p>
-        <textarea className={inputCls} rows={3} value={tokens} onChange={e=>setTokens(e.target.value)}
-          placeholder="Python, FastAPI, import numpy as np, model.fit(X,y), MLOps…" style={{resize:"vertical"}}/>
-      </div>
-
-      {/* Page Title */}
-      <div className="card p-5 space-y-3">
-        <p className="font-bold text-sm" style={{color:"var(--text1)",fontFamily:"'Inter',sans-serif"}}>🏷️ Browser Tab Title</p>
-        <p className="text-xs" style={{color:"var(--text3)"}}>The text shown in the browser tab and search results</p>
+        <p className="font-bold text-sm" style={{ color:"var(--text1)", fontFamily:"'Inter',sans-serif" }}>🏷️ Browser Tab Title</p>
         <input className={inputCls} value={pageTitle} onChange={e=>setPageTitle(e.target.value)} placeholder="John Doe | AI Engineer"/>
       </div>
 
-      {/* Open to work */}
       <div className="card p-5 space-y-3">
-        <p className="font-bold text-sm" style={{color:"var(--text1)",fontFamily:"'Inter',sans-serif"}}>🟢 Availability Status</p>
+        <p className="font-bold text-sm" style={{ color:"var(--text1)", fontFamily:"'Inter',sans-serif" }}>🟢 Availability Status</p>
         <label className="flex items-center gap-2 cursor-pointer">
           <input type="checkbox" checked={openToWork} onChange={e=>setOpenToWork(e.target.checked)}/>
           <span className="text-sm font-medium" style={{color:"var(--text2)"}}>Show "Open to opportunities" in contact section</span>
@@ -199,19 +185,27 @@ setNavBrand(d.navbar_brand||"Portfolio//;");
         )}
       </div>
 
-      {/* Stats */}
+      <div className="card p-5 space-y-3">
+        <p className="font-bold text-sm" style={{ color:"var(--text1)", fontFamily:"'Inter',sans-serif" }}>✦ Animation Tokens</p>
+        <p className="text-xs" style={{ color:"var(--text3)" }}>Comma-separated skills/code snippets floating in the hero background</p>
+        <textarea className={inputCls} rows={3} value={tokens} onChange={e=>setTokens(e.target.value)}
+          placeholder="Python, FastAPI, import numpy as np…" style={{resize:"vertical"}}/>
+      </div>
+
       <div className="card p-5 space-y-3">
         <div className="flex items-center justify-between">
-          <p className="font-bold text-sm" style={{color:"var(--text1)",fontFamily:"'Inter',sans-serif"}}>📊 Hero Stats (CGPA, Projects, etc.)</p>
+          <p className="font-bold text-sm" style={{ color:"var(--text1)", fontFamily:"'Inter',sans-serif" }}>📊 Hero Stats</p>
           <Btn onClick={()=>setStats(s=>[...s,{v:"",l:"",s:""}])} small><Plus size={11}/>Add</Btn>
         </div>
-        <p className="text-xs" style={{color:"var(--text3)"}}>Shown as stat cards below the hero content. Leave empty to hide.</p>
+        <p className="text-xs" style={{ color:"var(--text3)" }}>Stat cards below hero content. Leave empty to hide all.</p>
         {stats.map((st,i)=>(
           <div key={i} className="flex gap-2 items-center">
             <input className={inputCls} value={st.v} onChange={e=>setStats(s=>{const n=[...s];n[i]={...n[i],v:e.target.value};return n;})} placeholder="Value (3.9)" style={{maxWidth:"80px"}}/>
             <input className={inputCls} value={st.l} onChange={e=>setStats(s=>{const n=[...s];n[i]={...n[i],l:e.target.value};return n;})} placeholder="Label (CGPA)"/>
             <input className={inputCls} value={st.s} onChange={e=>setStats(s=>{const n=[...s];n[i]={...n[i],s:e.target.value};return n;})} placeholder="Sub (out of 4.0)"/>
-            <button onClick={()=>setStats(s=>s.filter((_,j)=>j!==i))} className="flex-shrink-0 w-7 h-7 rounded-lg flex items-center justify-center" style={{background:"rgba(239,68,68,0.1)",color:"#f87171",border:"1px solid rgba(239,68,68,0.2)"}}>
+            <button onClick={()=>setStats(s=>s.filter((_,j)=>j!==i))}
+              className="flex-shrink-0 w-7 h-7 rounded-lg flex items-center justify-center"
+              style={{background:"rgba(239,68,68,0.1)",color:"#f87171",border:"1px solid rgba(239,68,68,0.2)"}}>
               <X size={12}/>
             </button>
           </div>
@@ -272,18 +266,16 @@ function ThemePanel({ secret, toast }: { secret:string; toast:(t:Toast)=>void })
     root.style.setProperty("--surface2", s2);
     root.style.setProperty("--border",   `color-mix(in srgb, ${a} 12%, transparent)`);
   };
-
   const applyPreset = (p: typeof PRESETS[0]) => {
     setAccent(p.accent); setAccent2(p.accent2); setAccent3(p.accent3);
     applyLive(p.accent, p.accent2, p.accent3);
   };
-
   const save = async () => {
     setSaving(true);
     try {
       await adminUpdateTheme(secret, { accent, accent2, accent3, bg, bg2, surface, surface2 });
       applyLive();
-      toast({ msg:"Theme saved! Changes applied live.", ok:true });
+      toast({ msg:"Theme saved!", ok:true });
     } catch(e:any) { toast({ msg:e.message, ok:false }); }
     setSaving(false);
   };
@@ -311,10 +303,8 @@ function ThemePanel({ secret, toast }: { secret:string; toast:(t:Toast)=>void })
           ))}
         </div>
       </div>
-
       <div className="card p-5 space-y-4">
         <p className="font-bold text-sm" style={{ color:"var(--text1)", fontFamily:"'Inter',sans-serif" }}>Custom Colors</p>
-        <p className="text-xs" style={{ color:"var(--text3)" }}>Background stays dark. Only accent colors change.</p>
         <div className="grid sm:grid-cols-3 gap-4">
           {[
             { label:"Primary Accent",   val:accent,  set:setAccent,  hint:"Buttons, links, highlights" },
@@ -350,18 +340,15 @@ function ThemePanel({ secret, toast }: { secret:string; toast:(t:Toast)=>void })
           ))}
         </div>
       </div>
-
-      {/* Preview swatch */}
       <div className="card p-4">
         <p className="label mb-3">Live Preview</p>
         <div className="flex flex-wrap gap-3 items-center">
-          <div className="px-4 py-2 rounded-lg text-sm font-medium text-white" style={{ background:accent }}> Primary Button</div>
+          <div className="px-4 py-2 rounded-lg text-sm font-medium text-white" style={{ background:accent }}>Primary Button</div>
           <div className="px-4 py-2 rounded-lg text-sm font-medium" style={{ background:`${accent}15`, color:accent2, border:`1px solid ${accent}30` }}>Ghost Button</div>
           <span className="px-2 py-1 rounded-full text-xs" style={{ background:`${accent}10`, color:accent2, border:`1px solid ${accent}20`, fontFamily:"'JetBrains Mono',monospace" }}>tag</span>
           <span style={{ background:`linear-gradient(135deg,${accent},${accent2})`, WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", fontFamily:"'Inter',sans-serif", fontWeight:700, fontSize:"1.1rem" }}>Name</span>
         </div>
       </div>
-
       <Btn onClick={save} color="green" disabled={saving}>
         {saving?<Loader2 size={13} className="animate-spin"/>:<Save size={13}/>}
         {saving?"Saving…":"Save Theme"}
@@ -370,71 +357,81 @@ function ThemePanel({ secret, toast }: { secret:string; toast:(t:Toast)=>void })
   );
 }
 
-
 // ── Files Panel ───────────────────────────────────────────────────────────────
 function FilesPanel({ secret, toast }: { secret:string; toast:(t:Toast)=>void }) {
-  const [picUploading, setPicUploading] = useState(false);
-  const [picPreview,   setPicPreview]   = useState<string|null>(null);
+  const [picUploading,  setPicUploading]  = useState(false);
+  const [resUploading,  setResUploading]  = useState(false);
+  const [iconUploading, setIconUploading] = useState(false);
+  const [picPreview,    setPicPreview]    = useState<string|null>(null);
 
-  const uploadPicture = async (file: File) => {
-    setPicUploading(true);
+  const upload = async (file: File, type: string, setLoading: (v:boolean)=>void) => {
+    setLoading(true);
     try {
       const fd = new FormData();
       fd.append("file", file);
-      fd.append("type", "picture");
+      fd.append("type", type);
       const r = await fetch("/api/upload", { method:"POST", headers:{"x-admin-secret":secret}, body:fd });
       const d = await r.json();
       if (!r.ok) throw new Error(d.error || "Upload failed");
-      toast({ msg:"Photo updated! Refresh to see changes.", ok:true });
+      const label = type==="picture"?"Photo":type==="resume"?"Resume":"Icon";
+      toast({ msg:`${label} updated! Changes are live.`, ok:true });
     } catch(e:any) { toast({ msg:e.message, ok:false }); }
-    setPicUploading(false);
+    setLoading(false);
   };
 
-  const handlePicture = () => {
+  const pick = (type: string, setLoading: (v:boolean)=>void, accept: string) => {
     const input = document.createElement("input");
-    input.type = "file"; input.accept = "image/jpeg,image/png,image/webp";
+    input.type = "file"; input.accept = accept;
     input.onchange = async (e) => {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (!file) return;
-      setPicPreview(URL.createObjectURL(file));
-      await uploadPicture(file);
+      if (type==="picture") setPicPreview(URL.createObjectURL(file));
+      await upload(file, type, setLoading);
     };
     input.click();
   };
 
   return (
     <div className="space-y-5">
-      {/* Profile Photo */}
+      {/* Photo */}
       <div className="card p-5">
-        <p className="font-bold text-sm mb-1" style={{color:"var(--text1)",fontFamily:"'Inter',sans-serif"}}>Profile Photo</p>
-        <p className="text-xs mb-4" style={{color:"var(--text3)"}}>Recommended: <strong style={{color:"var(--accent)"}}>600 × 800 px</strong> (3:4 ratio) · JPEG or PNG · max 5MB. Saved as <code>Picture.jpeg</code></p>
+        <p className="font-bold text-sm mb-1" style={{color:"var(--text1)",fontFamily:"'Inter',sans-serif"}}>📷 Profile Photo</p>
+        <p className="text-xs mb-4" style={{color:"var(--text3)"}}>Recommended: <strong style={{color:"var(--accent)"}}>600 × 800 px</strong> (3:4 ratio) · JPEG or PNG · max 5MB</p>
         <div className="flex items-center gap-4">
           <div className="w-20 h-28 rounded-xl overflow-hidden flex-shrink-0" style={{border:"1px solid var(--border)"}}>
-            <img src={picPreview || "/Picture.jpeg"} alt="Current photo" className="w-full h-full object-cover object-top"
-              onError={e=>{(e.target as HTMLImageElement).style.display="none";}}/>
+            <img src={picPreview || "/api/picture"} alt="Current photo" className="w-full h-full object-cover object-top"
+              onError={e=>{(e.target as HTMLImageElement).src="/Picture.jpeg";}}/>
           </div>
           <div>
-            <Btn onClick={handlePicture} disabled={picUploading}>
-              {picUploading?<><Loader2 size={13} className="animate-spin"/>Uploading…</>:<><span>📷</span>Upload Photo</>}
+            <Btn onClick={()=>pick("picture",setPicUploading,"image/jpeg,image/png,image/webp")} disabled={picUploading}>
+              {picUploading?<><Loader2 size={13} className="animate-spin"/>Uploading…</>:<>📷 Upload Photo</>}
             </Btn>
-            <p className="text-xs mt-2" style={{color:"var(--text3)"}}>Replaces the current photo immediately.</p>
+            <p className="text-xs mt-2" style={{color:"var(--text3)"}}>Stored in database — works on Vercel.</p>
           </div>
         </div>
       </div>
 
-      {/* Resume & Icon — manual */}
-      <div className="card p-5 space-y-4">
-        <p className="font-bold text-sm" style={{color:"var(--text1)",fontFamily:"'Inter',sans-serif"}}>📄 Resume & 🎨 Icon</p>
-        <p className="text-sm leading-relaxed" style={{color:"var(--text2)"}}>
-          To update your resume or browser tab icon, add the files to <code style={{color:"var(--accent)"}}>frontend/public/</code> and push to GitHub — Vercel redeploys automatically in ~1 minute.
-        </p>
-        <div className="space-y-2 text-xs mono" style={{color:"var(--text3)"}}>
-          <p>• Resume → <span style={{color:"var(--accent)"}}>frontend/public/resume.pdf</span></p>
-          <p>• Icon &nbsp; → <span style={{color:"var(--accent)"}}>frontend/public/icon.svg</span></p>
+      {/* Resume */}
+      <div className="card p-5">
+        <p className="font-bold text-sm mb-1" style={{color:"var(--text1)",fontFamily:"'Inter',sans-serif"}}>📄 Resume / CV</p>
+        <p className="text-xs mb-4" style={{color:"var(--text3)"}}>Upload your CV as PDF. Stored in database — served via <code>/api/resume</code>.</p>
+        <div className="flex items-center gap-3">
+          <Btn onClick={()=>pick("resume",setResUploading,"application/pdf")} disabled={resUploading}>
+            {resUploading?<><Loader2 size={13} className="animate-spin"/>Uploading…</>:<>📄 Upload Resume PDF</>}
+          </Btn>
+          <a href="/api/resume" target="_blank" rel="noopener noreferrer" className="text-xs" style={{color:"var(--accent)"}}>
+            View current →
+          </a>
         </div>
-        <div className="p-3 rounded-lg text-xs" style={{background:"color-mix(in srgb,var(--accent) 6%,transparent)",border:"1px solid var(--border)",color:"var(--text2)"}}>
-          <strong style={{color:"var(--text1)"}}>Quick steps:</strong> Replace the file locally → <code>git add . && git commit -m "update files" && git push</code>
-        </div>
+      </div>
+
+      {/* Icon */}
+      <div className="card p-5">
+        <p className="font-bold text-sm mb-1" style={{color:"var(--text1)",fontFamily:"'Inter',sans-serif"}}>🎨 Browser Tab Icon</p>
+        <p className="text-xs mb-4" style={{color:"var(--text3)"}}>Upload an SVG. Stored in database — served via <code>/api/icon</code>. Appears next to your name in the browser tab.</p>
+        <Btn onClick={()=>pick("icon",setIconUploading,"image/svg+xml")} disabled={iconUploading}>
+          {iconUploading?<><Loader2 size={13} className="animate-spin"/>Uploading…</>:<>🎨 Upload Icon SVG</>}
+        </Btn>
       </div>
     </div>
   );
@@ -449,7 +446,7 @@ function SkillsPanel({ secret, toast }: { secret:string; toast:(t:Toast)=>void }
   const [icon,     setIcon]     = useState("code");
   const [skillItems,setSkillItems]=useState("");
 
-  const load = useCallback(async()=>{ setLoading(true); const r=await fetch(`${API}/api/skills`); setItems(await r.json()); setLoading(false); },[]);
+  const load=useCallback(async()=>{ setLoading(true); const r=await fetch(`${API}/api/skills`); setItems(await r.json()); setLoading(false); },[]);
   useEffect(()=>{ load(); },[load]);
   const cancel=()=>{ setEditing(null); setCategory(""); setIcon("code"); setSkillItems(""); };
   const startEdit=(it:any)=>{ setEditing(it.id); setCategory(it.category); setIcon(it.icon); setSkillItems(it.items.join(", ")); };
@@ -472,7 +469,7 @@ function SkillsPanel({ secret, toast }: { secret:string; toast:(t:Toast)=>void }
       ):<Btn onClick={()=>{cancel();setEditing("new");}}><Plus size={13}/>Add Skill Group</Btn>}
 
       {loading?<div className="flex justify-center py-8"><Loader2 size={22} className="animate-spin" style={{color:"var(--accent)"}}/></div>:
-        items.map(it=>(
+        [...items].reverse().map(it=>(
           <div key={it.id} className="card p-4">
             {editing===it.id?(
               <div className="space-y-3">
@@ -538,10 +535,11 @@ function ExpPanel({ secret, toast }: { secret:string; toast:(t:Toast)=>void }) {
 
   return (
     <div className="space-y-4">
-      {editing==="new"?<div className="card p-5" style={{borderColor:"color-mix(in srgb,var(--accent) 30%,transparent)"}}><p className="font-bold text-sm mb-3" style={{color:"var(--text1)"}}>New Experience</p>{expFormJSX}</div>
-      :<Btn onClick={()=>{cancel();setEditing("new");}}><Plus size={13}/>Add Experience</Btn>}
+      {editing==="new"
+        ?<div className="card p-5" style={{borderColor:"color-mix(in srgb,var(--accent) 30%,transparent)"}}><p className="font-bold text-sm mb-3" style={{color:"var(--text1)"}}>New Experience</p>{expFormJSX}</div>
+        :<Btn onClick={()=>{cancel();setEditing("new");}}><Plus size={13}/>Add Experience</Btn>}
       {loading?<div className="flex justify-center py-8"><Loader2 size={22} className="animate-spin" style={{color:"var(--accent)"}}/></div>:
-        items.map(it=><div key={it.id} className="card p-4">{editing===it.id?expFormJSX:(
+        [...items].reverse().map(it=><div key={it.id} className="card p-4">{editing===it.id?expFormJSX:(
           <div className="flex items-start justify-between gap-3">
             <div>
               <p className="font-bold text-sm" style={{color:"var(--text1)",fontFamily:"'DM Sans',sans-serif"}}>{it.role}</p>
@@ -592,10 +590,11 @@ function ProjPanel({ secret, toast }: { secret:string; toast:(t:Toast)=>void }) 
 
   return (
     <div className="space-y-4">
-      {editing==="new"?<div className="card p-5" style={{borderColor:"color-mix(in srgb,var(--accent) 30%,transparent)"}}><p className="font-bold text-sm mb-3" style={{color:"var(--text1)"}}>New Project</p>{projFormJSX}</div>
-      :<Btn onClick={()=>{cancel();setEditing("new");}}><Plus size={13}/>Add Project</Btn>}
+      {editing==="new"
+        ?<div className="card p-5" style={{borderColor:"color-mix(in srgb,var(--accent) 30%,transparent)"}}><p className="font-bold text-sm mb-3" style={{color:"var(--text1)"}}>New Project</p>{projFormJSX}</div>
+        :<Btn onClick={()=>{cancel();setEditing("new");}}><Plus size={13}/>Add Project</Btn>}
       {loading?<div className="flex justify-center py-8"><Loader2 size={22} className="animate-spin" style={{color:"var(--accent)"}}/></div>:
-        items.map(it=><div key={it.id} className="card p-4">{editing===it.id?projFormJSX:(
+        [...items].reverse().map(it=><div key={it.id} className="card p-4">{editing===it.id?projFormJSX:(
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
               <p className="font-bold text-sm mb-1" style={{color:"var(--text1)",fontFamily:"'DM Sans',sans-serif"}}>{it.title}</p>
@@ -618,12 +617,15 @@ function EduPanel({ secret, toast }: { secret:string; toast:(t:Toast)=>void }) {
 
   const load=useCallback(async()=>{ setLoading(true); const r=await fetch(`${API}/api/education`); setData(await r.json()); setLoading(false); },[]);
   useEffect(()=>{ load(); },[load]);
-
   const setEdu =(i:number,k:string,v:string)=>setData((d:any)=>{const e=[...d.education];  e[i]={...e[i],[k]:v};return{...d,education:e};});
   const setCert=(i:number,k:string,v:string)=>setData((d:any)=>{const c=[...d.certifications];c[i]={...c[i],[k]:v};return{...d,certifications:c};});
   const save=async()=>{ setSaving(true); try{ await adminUpdateEducation(secret,{education:data.education,certifications:data.certifications.map((c:any)=>({title:c.title||c,issuer:c.issuer||""}))}); toast({msg:"Education updated!",ok:true}); load(); }catch(e:any){toast({msg:e.message,ok:false});} setSaving(false); };
 
   if(loading) return <div className="flex justify-center py-8"><Loader2 size={22} className="animate-spin" style={{color:"var(--accent)"}}/></div>;
+
+  // Newest on top for display
+  const eduDisplay  = [...data.education].reverse();
+  const certDisplay = [...data.certifications].reverse();
 
   return (
     <div className="space-y-6">
@@ -632,33 +634,39 @@ function EduPanel({ secret, toast }: { secret:string; toast:(t:Toast)=>void }) {
           <p className="font-bold text-sm" style={{color:"var(--text1)"}}>Education Entries</p>
           <Btn onClick={()=>setData((d:any)=>({...d,education:[...d.education,{degree:"",institution:"",duration:"",status:"",gpa:""}]}))} small><Plus size={11}/>Add</Btn>
         </div>
-        {data.education.map((e:any,i:number)=>(
-          <div key={i} className="card p-4 mb-3 space-y-3">
-            <div className="grid sm:grid-cols-2 gap-3">
-              <div><label className="label block mb-1.5">Degree</label><input className={inputCls} value={e.degree} onChange={ev=>setEdu(i,"degree",ev.target.value)}/></div>
-              <div><label className="label block mb-1.5">Institution</label><input className={inputCls} value={e.institution} onChange={ev=>setEdu(i,"institution",ev.target.value)}/></div>
+        {eduDisplay.map((e:any,di:number)=>{
+          const i = data.education.length - 1 - di;
+          return (
+            <div key={i} className="card p-4 mb-3 space-y-3">
+              <div className="grid sm:grid-cols-2 gap-3">
+                <div><label className="label block mb-1.5">Degree</label><input className={inputCls} value={e.degree} onChange={ev=>setEdu(i,"degree",ev.target.value)}/></div>
+                <div><label className="label block mb-1.5">Institution</label><input className={inputCls} value={e.institution} onChange={ev=>setEdu(i,"institution",ev.target.value)}/></div>
+              </div>
+              <div className="grid sm:grid-cols-3 gap-3">
+                <div><label className="label block mb-1.5">Duration</label><input className={inputCls} value={e.duration} onChange={ev=>setEdu(i,"duration",ev.target.value)}/></div>
+                <div><label className="label block mb-1.5">Status</label><input className={inputCls} value={e.status} onChange={ev=>setEdu(i,"status",ev.target.value)}/></div>
+                <div><label className="label block mb-1.5">GPA</label><input className={inputCls} value={e.gpa} onChange={ev=>setEdu(i,"gpa",ev.target.value)}/></div>
+              </div>
+              <Btn onClick={()=>setData((d:any)=>({...d,education:d.education.filter((_:any,j:number)=>j!==i)}))} color="red" small><Trash2 size={11}/>Remove</Btn>
             </div>
-            <div className="grid sm:grid-cols-3 gap-3">
-              <div><label className="label block mb-1.5">Duration</label><input className={inputCls} value={e.duration} onChange={ev=>setEdu(i,"duration",ev.target.value)}/></div>
-              <div><label className="label block mb-1.5">Status</label><input className={inputCls} value={e.status} onChange={ev=>setEdu(i,"status",ev.target.value)}/></div>
-              <div><label className="label block mb-1.5">GPA</label><input className={inputCls} value={e.gpa} onChange={ev=>setEdu(i,"gpa",ev.target.value)}/></div>
-            </div>
-            <Btn onClick={()=>setData((d:any)=>({...d,education:d.education.filter((_:any,j:number)=>j!==i)}))} color="red" small><Trash2 size={11}/>Remove</Btn>
-          </div>
-        ))}
+          );
+        })}
       </div>
       <div>
         <div className="flex items-center justify-between mb-3">
           <p className="font-bold text-sm" style={{color:"var(--text1)"}}>Certifications</p>
           <Btn onClick={()=>setData((d:any)=>({...d,certifications:[...d.certifications,{title:"",issuer:""}]}))} small><Plus size={11}/>Add</Btn>
         </div>
-        {data.certifications.map((c:any,i:number)=>(
-          <div key={i} className="card p-4 mb-3 space-y-3">
-            <div><label className="label block mb-1.5">Title</label><input className={inputCls} value={typeof c==="string"?c:c.title} onChange={ev=>setCert(i,"title",ev.target.value)}/></div>
-            <div><label className="label block mb-1.5">Issuer</label><input className={inputCls} value={c.issuer||""} onChange={ev=>setCert(i,"issuer",ev.target.value)}/></div>
-            <Btn onClick={()=>setData((d:any)=>({...d,certifications:d.certifications.filter((_:any,j:number)=>j!==i)}))} color="red" small><Trash2 size={11}/>Remove</Btn>
-          </div>
-        ))}
+        {certDisplay.map((c:any,di:number)=>{
+          const i = data.certifications.length - 1 - di;
+          return (
+            <div key={i} className="card p-4 mb-3 space-y-3">
+              <div><label className="label block mb-1.5">Title</label><input className={inputCls} value={typeof c==="string"?c:c.title} onChange={ev=>setCert(i,"title",ev.target.value)}/></div>
+              <div><label className="label block mb-1.5">Issuer</label><input className={inputCls} value={c.issuer||""} onChange={ev=>setCert(i,"issuer",ev.target.value)}/></div>
+              <Btn onClick={()=>setData((d:any)=>({...d,certifications:d.certifications.filter((_:any,j:number)=>j!==i)}))} color="red" small><Trash2 size={11}/>Remove</Btn>
+            </div>
+          );
+        })}
       </div>
       <Btn onClick={save} color="green" disabled={saving}>
         {saving?<Loader2 size={13} className="animate-spin"/>:<Save size={13}/>}
@@ -678,13 +686,13 @@ export default function AdminPage() {
   const showToast=(t:Toast)=>{ setToastState(t); setTimeout(()=>setToastState(null),4000); };
 
   const TABS: {key:Tab; label:string; icon:React.ReactNode}[] = [
-    { key:"profile",    label:"Profile & Links", icon:<User size={13}/>       },
-    { key:"theme",      label:"Theme & Colors",  icon:<Palette size={13}/>    },
-    { key:"files",      label:"Files",           icon:<span>📁</span>          },
-    { key:"skills",     label:"Skills",          icon:<span>⚡</span>          },
-    { key:"experience", label:"Experience",      icon:<span>💼</span>          },
-    { key:"projects",   label:"Projects",        icon:<span>🚀</span>          },
-    { key:"education",  label:"Education",       icon:<span>🎓</span>          },
+    { key:"profile",    label:"Profile & Links", icon:<User size={13}/>    },
+    { key:"theme",      label:"Theme & Colors",  icon:<Palette size={13}/> },
+    { key:"files",      label:"Files",           icon:<span>📁</span>       },
+    { key:"skills",     label:"Skills",          icon:<span>⚡</span>       },
+    { key:"experience", label:"Experience",      icon:<span>💼</span>       },
+    { key:"projects",   label:"Projects",        icon:<span>🚀</span>       },
+    { key:"education",  label:"Education",       icon:<span>🎓</span>       },
   ];
 
   if (!authed) return <Login onLogin={s=>{ setSecret(s); setAuthed(true); }}/>;
