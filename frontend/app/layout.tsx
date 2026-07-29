@@ -4,12 +4,13 @@ import Providers from "../components/Providers";
 
 export const metadata: Metadata = {
   title: "Saqib Ahmad Siddiqui | AI & Software Engineer",
-  description: "Results-driven Software Engineer specializing in Python, AI & Data Science, Oracle technologies.",
-  keywords: ["Saqib Ahmad Siddiqui","AI Software Engineer","Python","Machine Learning","FastAPI"],
+  description: "Results-driven AI/ML & Software Engineer specializing in System Architecture, System Design, RAG, Generative AI, Microservices, Artificial Intelligence (AI), Machine Learning (ML) & Data Science, Oracle technologies.",
+  verification: {google: "D6vPNWFUc7zRgYiof7JpNgm4zzPN2khlCJOtoHK-DhI",},
+  keywords: ["Saqib Ahmad Siddiqui","AI Engineer","Software Engineer","ML Engineer","Python","FastAPI","System Architecture","System Design","RAG","LLM","Generative AI","Machine Learning (ML)","Deep Learning (DL)","Natural Language Processing (NLP)","Microservices","RestAPI","Artificial Intelligence (AI)","Data Science","NFC IET"],
   authors: [{ name: "Saqib Ahmad Siddiqui" }],
   openGraph: {
-    title: "Saqib Ahmad Siddiqui | AI & Software Engineer",
-    description: "Software Engineer | Python | AI & Data Science",
+    title: "Saqib Ahmad Siddiqui | AI/ML & Software Engineer",
+    description: "Software Engineer | Python | AI/ML & Data Science",
     type: "website",
   },
   icons: { icon: "/api/icon", apple: "/api/icon" },
