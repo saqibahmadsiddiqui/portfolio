@@ -4,23 +4,27 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── Theme CSS variables — overridden dynamically by Providers ── */
+/* ── Ocean Pro Design System — Dark defaults, overridden by JS ── */
 :root {
-  --bg:       #04070f;
-  --bg2:      #070d1a;
-  --surface:  #0c1424;
-  --surface2: #111e33;
-  --accent:   #3b82f6;
-  --accent2:  #06b6d4;
-  --accent3:  #6366f1;
-  --text1:    #f0f4ff;
-  --text2:    #8899bb;
-  --text3:    #3d5278;
-  --border:   rgba(59,130,246,0.12);
+  --accent:       #0ea5e9;
+  --accent2:      #14b8a6;
+  --accent3:      #f97316;
+  --bg:           #0f1520;
+  --bg2:          #141b2d;
+  --surface:      #1a2235;
+  --surface2:     #1e2a40;
+  --text1:        #f0f4ff;
+  --text2:        #8899bb;
+  --text3:        #3d5278;
+  --border:       rgba(14,165,233,0.13);
+  --card-shadow:  none;
+  --dots-color:   rgba(14,165,233,0.06);
+  --input-bg:     #1e2a40;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; overflow-x: hidden; }
+
 body {
   background: var(--bg);
   color: var(--text1);
@@ -28,14 +32,16 @@ body {
   overflow-x: hidden;
   width: 100%;
   -webkit-font-smoothing: antialiased;
+  transition: background 0.25s ease, color 0.25s ease;
 }
+
 section { overflow-x: hidden; width: 100%; }
 main    { overflow-x: hidden; }
 
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--accent) 30%, transparent); border-radius: 4px; }
-::selection { background: color-mix(in srgb, var(--accent) 20%, transparent); }
+::selection { background: color-mix(in srgb, var(--accent) 22%, transparent); }
 
 /* ── Wrappers ── */
 .wrap {
@@ -66,13 +72,14 @@ main    { overflow-x: hidden; }
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
 .label {
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--accent);
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
 /* ── Cards ── */
@@ -80,13 +87,14 @@ main    { overflow-x: hidden; }
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 14px;
-  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+  box-shadow: var(--card-shadow);
+  transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s, background 0.25s;
   overflow: hidden;
 }
 .card:hover {
-  border-color: color-mix(in srgb, var(--accent) 30%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
   transform: translateY(-2px);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15), var(--card-shadow);
 }
 
 /* ── Buttons ── */
@@ -108,11 +116,11 @@ main    { overflow-x: hidden; }
 .btn-primary {
   background: var(--accent);
   color: #fff;
-  box-shadow: 0 0 20px color-mix(in srgb, var(--accent) 25%, transparent);
+  box-shadow: 0 0 20px color-mix(in srgb, var(--accent) 28%, transparent);
 }
 .btn-primary:hover {
-  filter: brightness(1.1);
-  box-shadow: 0 0 30px color-mix(in srgb, var(--accent) 40%, transparent);
+  filter: brightness(1.08);
+  box-shadow: 0 0 32px color-mix(in srgb, var(--accent) 42%, transparent);
   transform: translateY(-1px);
 }
 .btn-ghost {
@@ -123,7 +131,7 @@ main    { overflow-x: hidden; }
 .btn-ghost:hover {
   background: color-mix(in srgb, var(--accent) 14%, transparent);
   color: var(--text1);
-  border-color: color-mix(in srgb, var(--accent) 30%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 32%, transparent);
 }
 
 /* ── Tag ── */
@@ -132,17 +140,18 @@ main    { overflow-x: hidden; }
   font-size: 10.5px;
   padding: 3px 9px;
   border-radius: 20px;
-  background: color-mix(in srgb, var(--accent) 7%, transparent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
   color: var(--accent2);
-  border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
   display: inline-block;
   white-space: nowrap;
+  transition: background 0.2s, border-color 0.2s;
 }
 
 /* ── Form inputs ── */
 .input {
   width: 100%;
-  background: var(--surface2);
+  background: var(--input-bg, var(--surface2));
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 11px 14px;
@@ -150,31 +159,31 @@ main    { overflow-x: hidden; }
   font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
 }
 .input::placeholder { color: var(--text3); }
 .input:focus {
-  border-color: color-mix(in srgb, var(--accent) 50%, transparent);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 7%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 8%, transparent);
 }
 
 /* ── Divider ── */
 .hr {
   height: 1px;
-  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent) 20%, transparent), transparent);
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent) 22%, transparent), transparent);
   width: 100%;
 }
 
-/* ── Dot grid background ── */
+/* ── Dot grid ── */
 .dots {
-  background-image: radial-gradient(color-mix(in srgb, var(--accent) 6%, transparent) 1px, transparent 1px);
+  background-image: radial-gradient(var(--dots-color) 1px, transparent 1px);
   background-size: 26px 26px;
 }
 
 /* ── Animations ── */
 @keyframes pulseGlow {
-  0%,100% { opacity:.12; }
-  50%      { opacity:.28; }
+  0%,100% { opacity:.1; }
+  50%      { opacity:.25; }
 }
 @keyframes spinSlow {
   from { transform: rotate(0deg); }
@@ -198,7 +207,7 @@ main    { overflow-x: hidden; }
   88%  { opacity:1; }
   100% { transform:translateX(calc(100vw + 150px)); opacity:0; }
 }
-@keyframes fadeUp {
-  from { opacity:0; transform:translateY(20px); }
-  to   { opacity:1; transform:translateY(0); }
+@keyframes toggleSlide {
+  from { transform: scale(0.85); }
+  to   { transform: scale(1); }
 }
