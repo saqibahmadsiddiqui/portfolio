@@ -3,7 +3,7 @@ import "./globals.css";
 import Providers from "../components/Providers";
 
 export const metadata: Metadata = {
-  title: "Saqib Ahmad Siddiqui | AI & Software Engineer",
+  title: "Saqib Ahmad Siddiqui | AI/ML & Software Engineer",
   description: "Results-driven AI/ML & Software Engineer specializing in System Architecture, System Design, RAG, Generative AI, Microservices, Artificial Intelligence (AI), Machine Learning (ML) & Data Science, Oracle technologies.",
   verification: {google: "D6vPNWFUc7zRgYiof7JpNgm4zzPN2khlCJOtoHK-DhI",},
   keywords: ["Saqib Ahmad Siddiqui","AI Engineer","Software Engineer","ML Engineer","Python","FastAPI","System Architecture","System Design","RAG","LLM","Generative AI","Machine Learning (ML)","Deep Learning (DL)","Natural Language Processing (NLP)","Microservices","RestAPI","Artificial Intelligence (AI)","Data Science","NFC IET"],
