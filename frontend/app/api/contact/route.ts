@@ -9,7 +9,7 @@ async function validateEmail(email: string): Promise<{ valid: boolean; reason: s
   if (!ABSTRACT_KEY) return { valid: true, reason: "skipped" };
   try {
     const r = await fetch(
-      `https://emailvalidation.abstractapi.com/v1/?api_key=${ABSTRACT_KEY}&email=${encodeURIComponent(email)}`,
+      `https://emailreputation.abstractapi.com/v1/?api_key=${ABSTRACT_KEY}&email=${encodeURIComponent(email)}`,
       { signal: AbortSignal.timeout(5000) }
     );
     const d = await r.json();
