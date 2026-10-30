@@ -233,7 +233,7 @@ export default function Hero() {
             {profile.stats.map(({v,l,s}:{v:string;l:string;s:string})=>(
               <div key={l} className="card p-3 sm:p-4 text-center">
                 <p className="grad mb-0.5 font-bold" style={{ fontFamily:"'Inter',sans-serif", fontSize:"clamp(1.1rem,2.2vw,1.4rem)" }}>{v}</p>
-                <p className="font-medium text-xs text-white mb-0.5" style={{ fontFamily:"'DM Sans',sans-serif" }}>{l}</p>
+                <p className="font-medium text-xs mb-0.5" style={{ color:"var(--text1)", fontFamily:"'DM Sans',sans-serif" }}>{l}</p>
                 <p className="text-xs" style={{ color:"var(--text3)", fontFamily:"'JetBrains Mono',monospace" }}>{s}</p>
               </div>
             ))}
