@@ -116,7 +116,7 @@ export default function Contact() {
                 disabled={status==="loading"}
                 className="btn btn-primary w-full justify-center disabled:opacity-50 disabled:cursor-not-allowed">
                 {status==="loading" ? <><Loader2 size={13} className="animate-spin"/>Sending…</>
-                 : status==="success" ? <><CheckCircle size={13}/>Sent!</>
+                 : status==="success" ? <><Send size={13}/>Send Message</>
                  : <><Send size={13}/>Send Message</>}
               </button>
             </div>
