@@ -3,17 +3,19 @@ import nodemailer from "nodemailer";
 
 const GMAIL_USER     = process.env.GMAIL_USER || "";
 const GMAIL_PASSWORD = process.env.GMAIL_APP_PASSWORD || "";
-const ZB_KEY         = process.env.ZEROBOUNCE_KEY || "";
+const ABSTRACT_KEY   = process.env.ABSTRACT_EMAIL_KEY || "";
 
 async function validateEmail(email: string): Promise<{ valid: boolean; reason: string }> {
-  if (!ZB_KEY) return { valid: true, reason: "skipped" };
+  if (!ABSTRACT_KEY) return { valid: true, reason: "skipped" };
   try {
     const r = await fetch(
-      `https://api.zerobounce.net/v2/validate?api_key=${ZB_KEY}&email=${encodeURIComponent(email)}`
+      `https://emailvalidation.abstractapi.com/v1/?api_key=${ABSTRACT_KEY}&email=${encodeURIComponent(email)}`,
+      { signal: AbortSignal.timeout(5000) }
     );
     const d = await r.json();
-    if (d.status === "valid") return { valid: true, reason: "valid" };
-    return { valid: false, reason: d.status || "invalid" };
+    if (d.deliverability === "UNDELIVERABLE") return { valid: false, reason: "invalid" };
+    if (d.is_disposable_email?.value === true)  return { valid: false, reason: "disposable" };
+    return { valid: true, reason: d.deliverability || "valid" };
   } catch {
     return { valid: true, reason: "skipped" };
   }
