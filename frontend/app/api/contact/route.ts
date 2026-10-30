@@ -1,21 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
-const GMAIL_USER     = process.env.GMAIL_USER || "";
-const GMAIL_PASSWORD = process.env.GMAIL_APP_PASSWORD || "";
-const ABSTRACT_KEY   = process.env.ABSTRACT_EMAIL_KEY || "";
+const GMAIL_USER       = process.env.GMAIL_USER || "";
+const GMAIL_PASSWORD   = process.env.GMAIL_APP_PASSWORD || "";
+const MAILBOXLAYER_KEY = process.env.MAILBOXLAYER_KEY || "";
 
 async function validateEmail(email: string): Promise<{ valid: boolean; reason: string }> {
-  if (!ABSTRACT_KEY) return { valid: true, reason: "skipped" };
+  if (!MAILBOXLAYER_KEY) return { valid: true, reason: "skipped" };
   try {
     const r = await fetch(
-      `https://emailreputation.abstractapi.com/v1/?api_key=${ABSTRACT_KEY}&email=${encodeURIComponent(email)}`,
-      { signal: AbortSignal.timeout(5000) }
+      `http://apilayer.net/api/check?access_key=${MAILBOXLAYER_KEY}&email=${encodeURIComponent(email)}&smtp=1&format=1`,
+      { signal: AbortSignal.timeout(6000) }
     );
     const d = await r.json();
-    if (d.deliverability === "UNDELIVERABLE") return { valid: false, reason: "invalid" };
-    if (d.is_disposable_email?.value === true)  return { valid: false, reason: "disposable" };
-    return { valid: true, reason: d.deliverability || "valid" };
+    // API-level error (wrong key, rate limit, etc.) → fail open
+    if (d.error) return { valid: true, reason: "skipped" };
+    // format_valid: email string is malformed
+    if (d.format_valid === false) return { valid: false, reason: "invalid" };
+    // mx_found: domain has no mail servers — cannot receive email
+    if (d.mx_found === false)     return { valid: false, reason: "invalid domain" };
+    // disposable: throwaway / temp-mail providers
+    if (d.disposable === true)    return { valid: false, reason: "disposable" };
+    return { valid: true, reason: "valid" };
   } catch {
     return { valid: true, reason: "skipped" };
   }
@@ -29,12 +35,19 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Name, email and message are required." }, { status: 400 });
     }
 
+    // Basic format gate before consuming an API credit
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    if (!emailRegex.test(email)) {
+      return NextResponse.json({ error: "Please enter a valid email address." }, { status: 422 });
+    }
+
     const { valid, reason } = await validateEmail(email);
     if (!valid) {
-      return NextResponse.json(
-        { error: `Email appears to be ${reason}. Please use a real email address.` },
-        { status: 422 }
-      );
+      const msg =
+        reason === "invalid domain"  ? "Email domain does not accept mail. Please use a real email address." :
+        reason === "disposable"      ? "Disposable emails are not accepted. Please use a real email address." :
+                                       "Email appears to be invalid. Please use a real email address.";
+      return NextResponse.json({ error: msg }, { status: 422 });
     }
 
     if (!GMAIL_USER || !GMAIL_PASSWORD) {
