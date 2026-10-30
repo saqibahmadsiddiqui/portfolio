@@ -113,7 +113,7 @@ export default function Contact() {
               )}
 
               <button onClick={submit}
-                disabled={status==="loading"||status==="success"}
+                disabled={status==="loading"}
                 className="btn btn-primary w-full justify-center disabled:opacity-50 disabled:cursor-not-allowed">
                 {status==="loading" ? <><Loader2 size={13} className="animate-spin"/>Sending…</>
                  : status==="success" ? <><CheckCircle size={13}/>Sent!</>
