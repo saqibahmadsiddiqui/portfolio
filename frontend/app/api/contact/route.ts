@@ -110,8 +110,8 @@ export async function POST(req: NextRequest) {
       html: `
         <div style="font-family:'Segoe UI',Arial,sans-serif;max-width:620px;margin:0 auto;background:#ffffff;color:#1a1a2e;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden">
           <div style="background:linear-gradient(135deg,#1e3a5f,#0f2647);padding:28px 32px">
-            <h2 style="margin:0;font-size:18px;font-weight:600;color:#ffffff">Thanks for reaching out.</h2>
-            //<p style="margin:6px 0 0;font-size:13px;color:#93c5fd">I've received your message and will get back to you shortly.</p>
+            <h2 style="margin:0;font-size:18px;font-weight:600;color:#ffffff">Thanks for reaching out, ${name}!</h2>
+            <p style="margin:6px 0 0;font-size:13px;color:#93c5fd">I've received your message and will get back to you shortly.</p>
           </div>
           <div style="padding:28px 32px">
             <p style="margin:0 0 16px;font-size:14px;line-height:1.7;color:#374151">
@@ -134,8 +134,8 @@ export async function POST(req: NextRequest) {
             </div>
 
             <div style="margin-top:28px;padding-top:20px;border-top:1px solid #e5e7eb">
-              <p style="margin:0 0 2px;font-size:14px;font-weight:600;color:#111827">Saqib Ahmad</p>
-              <p style="margin:0;font-size:13px;color:#6b7280">Software Engineer</p>
+              <p style="margin:0 0 2px;font-size:14px;font-weight:600;color:#111827">Saqib Ahmad Siddiqui</p>
+              <p style="margin:0;font-size:13px;color:#6b7280">AI/ML & Software Engineer</p>
             </div>
           </div>
           <div style="padding:14px 32px;background:#f9fafb;border-top:1px solid #e5e7eb">
