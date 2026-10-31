@@ -110,19 +110,19 @@ export async function POST(req: NextRequest) {
       html: `
         <div style="font-family:'Segoe UI',Arial,sans-serif;max-width:620px;margin:0 auto;background:#ffffff;color:#1a1a2e;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden">
           <div style="background:linear-gradient(135deg,#1e3a5f,#0f2647);padding:28px 32px">
-            <h2 style="margin:0;font-size:18px;font-weight:600;color:#ffffff">Thanks for reaching out, ${name}!</h2>
-            <p style="margin:6px 0 0;font-size:13px;color:#93c5fd">I've received your message and will get back to you shortly.</p>
+            <h2 style="margin:0;font-size:18px;font-weight:600;color:#ffffff">Thanks for reaching out.</h2>
+            //<p style="margin:6px 0 0;font-size:13px;color:#93c5fd">I've received your message and will get back to you shortly.</p>
           </div>
           <div style="padding:28px 32px">
             <p style="margin:0 0 16px;font-size:14px;line-height:1.7;color:#374151">
               Hi <strong>${name}</strong>,
             </p>
             <p style="margin:0 0 16px;font-size:14px;line-height:1.7;color:#374151">
-              Thank you for getting in touch through my portfolio. I've received your message and will respond as soon as possible — typically within 24 to 48 hours.
+              Thank you for getting in touch through my portfolio. I've received your message and will respond as soon as possible - typically within 24 to 48 hours.
             </p>
             <p style="margin:0 0 24px;font-size:14px;line-height:1.7;color:#374151">
               In the meantime, feel free to connect with me on
-              <a href="https://linkedin.com/in/saqibahmad2004" style="color:#2563eb;text-decoration:none;font-weight:500">LinkedIn</a>.
+              <a href="https://www.linkedin.com/in/saqib-ahmad-siddiqui" style="color:#2563eb;text-decoration:none;font-weight:500">LinkedIn</a>.
             </p>
 
             <div style="border-top:1px solid #e5e7eb;padding-top:20px;margin-top:4px">
